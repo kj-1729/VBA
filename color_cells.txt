@@ -1,0 +1,59 @@
+Sub color_cells()
+'
+'
+
+'
+    idx_x_id = 7
+    max_idx_x = 10
+    idx_y = 2
+    
+    'Sheets("data").Select
+
+    idx_y_from = idx_y
+    prev_id = ""
+    color_idx = 0
+    this_loop = 0
+    
+    While Len(Cells(idx_y, 1)) > 0
+        this_id = Cells(idx_y, idx_x_id)
+        
+        If this_id <> prev_id Then
+            If idx_y > 2 Then
+                ret = do_color_cells(idx_y_from, 1, idx_y - 1, max_idx_x, color_idx)
+                idx_y_from = idx_y
+            End If
+            color_idx = (color_idx + 1) Mod 2
+                    
+            prev_id = this_id
+        End If
+        
+        idx_y = idx_y + 1
+    Wend
+
+    ret = do_color_cells(idx_y_from, 1, idx_y - 1, max_idx_x, color_idx)
+
+End Sub
+
+Function do_color_cells(idx_y_from, idx_x_from, idx_y_to, idx_x_to, color_idx)
+    Range(Cells(idx_y_from, idx_x_from), Cells(idx_y_to, idx_x_to)).Select
+    
+    If color_idx = 0 Then
+        With Selection.Interior
+            .Pattern = xlSolid
+            .PatternColorIndex = xlAutomatic
+            .ThemeColor = xlThemeColorAccent2
+            .TintAndShade = 0.599993896298105
+            .PatternTintAndShade = 0
+        End With
+    Else
+        With Selection.Interior
+            .Pattern = xlSolid
+            .PatternColorIndex = xlAutomatic
+            .ThemeColor = xlThemeColorAccent5
+            .TintAndShade = 0.599993896298105
+            .PatternTintAndShade = 0
+        End With
+    End If
+
+End Function
+

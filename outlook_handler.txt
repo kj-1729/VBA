@@ -1,0 +1,137 @@
+' https://tonari-it.com/vba-outlook-object/
+
+
+Sub test1()
+'
+' test1 Macro
+'
+	Dim objOutlook As Outlook.Application
+	Dim objMail As Outlook.MailItem
+	Dim wsMail As Worksheet
+
+	Set objOutlook = New Outlook.Application
+	Set wsMail = ThisWorkbook.Sheets("メール内容")
+
+	Set objMail = objOutlook.CreateItem(olMailItem)
+
+
+	With wsMail
+	    objMail.To = "abc@xyz.com"       'メール宛先
+	    objMail.Subject = .Range("B1").Value   '"Subject"       'メール件名
+	    objMail.BodyFormat = olFormatPlain    'メールの形式
+	    objMail.Body = .Range("B2").Value                'メール本文
+	    
+	    objMail.Send
+	End With
+
+	Set objOutlook = Nothing
+	MsgBox "Finished"
+
+End Sub
+
+Sub test0()
+	Dim objOutlook As Object
+	Set objOutlook = CreateObject("Outlook.Application")
+	Dim myNamespace As Outlook.Namespace
+	Set myNamespace = objOutlook.GetNamespace("MAPI")
+	 
+	Set myInbox = myNamespace.GetDefaultFolder(olFolderInbox)
+	 
+	Debug.Print myInbox
+	 
+	For i = 1 To myInbox.Folders.Count
+	    Debug.Print myInbox.Folders(i)
+	Next i
+
+End Sub
+
+
+Sub test2()
+	Dim objOutlook As Outlook.Application
+	Dim myNamespace As Outlook.Namespace
+	 
+	Set objOutlook = New Outlook.Application
+	Set myNamespace = objOutlook.GetNamespace("MAPI")
+	 
+	Stop
+End Sub
+
+Sub test3()
+
+	Dim objOutlook As Outlook.Application
+	Dim myNamespace As Outlook.Namespace
+	Dim myInbox As Variant
+	Dim i As Long
+	 
+	Set objOutlook = New Outlook.Application
+	Set myNamespace = objOutlook.GetNamespace("MAPI")
+	 
+	Set myInbox = myNamespace.GetDefaultFolder(olFolderInbox)
+	 
+	Debug.Print myInbox
+	 
+	For i = 1 To myInbox.Folders.Count
+	    Debug.Print myInbox.Folders(i)
+	Next i
+
+End Sub
+
+
+Sub GetMailtest()
+	Dim objOutlook As Outlook.Application
+	Dim myNamespace As Outlook.Namespace
+	Dim myInbox As Folder
+	 
+	Set objOutlook = New Outlook.Application
+	Set myNamespace = objOutlook.GetNamespace("MAPI")
+	Set myInbox = myNamespace.GetDefaultFolder(olFolderInbox)
+	 
+	With ThisWorkbook.Worksheets("Sheet1")
+	    .Cells(2, 1).Value = myInbox.Items(1).SentOn
+	    .Cells(2, 2).Value = myInbox.Items(1).Subject
+	    .Cells(2, 3).Value = myInbox.Items(1).Body
+	End With
+ 
+End Sub
+
+
+
+Sub GetMail()
+	Dim objOutlook As Outlook.Application
+	Dim myNamespace As Outlook.Namespace
+	Dim myInbox, mySubfolder
+	 
+	Set objOutlook = New Outlook.Application
+	Set myNamespace = objOutlook.GetNamespace("MAPI")
+	 
+	Set myInbox = myNamespace.GetDefaultFolder(olFolderInbox)
+	Set mySubfolder = myInbox.Folders.Item("SubFolder1")
+	 
+	Dim i As Long
+	 
+	For i = 1 To mySubfolder.Items.Count
+	    With ThisWorkbook.Worksheets("Sheet1")
+	        .Cells(i + 1, 1).Value = mySubfolder.Items(i).SentOn
+	        .Cells(i + 1, 2).Value = mySubfolder.Items(i).Subject
+	        .Cells(i + 1, 3).Value = mySubfolder.Items(i).Body
+	    End With
+	Next i
+End Sub
+
+
+Sub GetSMTPAddressForRecipients(mail As Outlook.MailItem)
+    Dim recips As Outlook.Recipients
+    Dim recip As Outlook.Recipient
+    Dim pa As Outlook.PropertyAccessor
+    Const PR_SMTP_ADDRESS As String = _
+        "http://schemas.microsoft.com/mapi/proptag/0x39FE001E"
+    Set recips = mail.Recipients
+    For Each recip In recips
+        Set pa = recip.PropertyAccessor
+        Debug.Print recip.Name & " SMTP=" _
+           & pa.GetProperty(PR_SMTP_ADDRESS)
+    Next
+End Sub
+
+
+

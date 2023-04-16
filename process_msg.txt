@@ -1,0 +1,65 @@
+' ################################################################################################################
+' #                                                                                                              #
+' #                                                                                                              #
+' #                                          readmail, output to text                                            #
+' #                                                                                                              #
+' #                                                                                                              #
+' ################################################################################################################
+
+Public Sub process_msg()
+	' Open Outlook
+	Dim handler As Outlook.Application
+	Dim this_namespace As Outlook.NameSpace
+	Dim this_folder
+	Dim this_msg
+	
+	Set handler = New Outlook.Application
+	Set this_namespace = handler.GetNamespace("MAPI")
+	Set this_folder = this_namespace.GetDefaultFolder(6)
+
+	' Open FileSystem
+	'Dim fso, fp, output_fname
+	'output_fname = "E:\users\abc\mail_ofc_somu.txt"
+	'Set fso = WScript.CreateObject("Scripting.FileSystemObject")
+	'Set fp = fso.OpenTextFile(output_fname, 2, True, 0)
+	Const TEXT_FILE = "E:\users\abc\mail_ofc_somu.txt"
+	Open TEXT_FLE For Output As #1
+	Dim outdelim
+	outdelim = "####################################" & vbTab
+
+	Dim num_msg, idx
+	num_msg = this_folder.Items.Count
+	For idx = 1 to num_msg
+		Set this_msg = this_folder.Items(idx)
+		if TypeName(this_msg) = "MailItem" then
+			On Error Resume Next
+			print #1, outdelim & "StartMsg"
+			print #1, outdelim & "IDX"
+			print #1, idx
+			print #1, outdelim & "ReceivedTime"
+			print #1, this_msg.ReceivedTime
+			print #1, outdelim & "SenderName"
+			print #1, this_msg.SenderName
+			print #1, outdelim & "SenderEmailAddress"
+			print #1, this_msg.SenderEmailAddress
+			print #1, outdelim & "SentOnBehalfOfName"
+			print #1, this_msg.SentOnBehalfOfName
+			print #1, outdelim & "To"
+			print #1, this_msg.To
+			print #1, outdelim & "CC"
+			print #1, this_msg.CC
+			print #1, outdelim & "Subject"
+			print #1, this_msg.Subject
+			print #1, outdelim & "Body"
+			print #1, this_msg.Body
+			print #1, outdelim & "HTMLBody"
+			print #1, this_msg.HTMLBody
+			print #1, outdelim & "EndOfMessage"
+			On Error Goto 0
+		end if
+	Next
+	Close #1
+
+end Sub
+
+
