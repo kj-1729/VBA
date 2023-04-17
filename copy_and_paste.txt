@@ -1,0 +1,36 @@
+Sub copy_and_paste()
+'
+' copy_and_paste Macro
+'
+
+'
+    Sheets("config").Select
+    dir_from = Cells(2, 4)
+    workbook_from = Cells(3, 4)
+    dir_to = Cells(4, 4)
+    workbook_to = Cells(5, 4)
+    
+    path_from = dir_from & workbook_from
+    path_to = dir_to & workbook_to
+    
+    Workbooks.Open Filename:=path_from
+    Workbooks.Open Filename:=path_to
+    
+    idx_y = 9
+    While Len(ThisWorkbook.Worksheets("config").Cells(idx_y, 1)) > 0
+        ' loc (from)
+        sheet_from = ThisWorkbook.Worksheets("config").Cells(idx_y, 1)
+        row_from = ThisWorkbook.Worksheets("config").Cells(idx_y, 2)
+        col_from = ThisWorkbook.Worksheets("config").Cells(idx_y, 3)
+        
+        ' loc (to)
+        sheet_to = ThisWorkbook.Worksheets("config").Cells(idx_y, 4)
+        row_to = ThisWorkbook.Worksheets("config").Cells(idx_y, 5)
+        col_to = ThisWorkbook.Worksheets("config").Cells(idx_y, 6)
+                
+        Workbooks(workbook_to).Worksheets(sheet_to).Cells(row_to, col_to) = Workbooks(workbook_from).Worksheets(sheet_from).Cells(row_from, col_from)
+        
+        idx_y = idx_y + 1
+    Wend
+        
+End Sub
