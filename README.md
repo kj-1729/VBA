@@ -22,5 +22,7 @@ This is a wrapper VBA script which kicks a python code.
 
 ## config
 
+Sample "config" sheet:
+
 <img width="575" alt="python_wrapper" src="https://user-images.githubusercontent.com/87534698/232742718-e842508e-469a-4825-abdb-e7a0f4e4882f.png">
 
