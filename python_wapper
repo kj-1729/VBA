@@ -1,0 +1,19 @@
+Sub python_wrapper()
+'
+    Sheets("config").Select
+    py = Cells(3, 3)
+    root_dir = Cells(4, 3)
+    
+    output_dir = Cells(5, 3)
+    output_filename = Cells(6, 3)
+    output_path = output_dir & output_filename
+    
+    cmd = "python " & py & " " & root_dir & " > " & output_path
+        
+    ' Run pyhon program
+    Dim wsh As New IWshRuntimeLibrary.WshShell
+    wsh.Run "%ComSpec% /c " & cmd, 0, True
+     
+    Set wsh = Nothing    
+'
+End Sub
