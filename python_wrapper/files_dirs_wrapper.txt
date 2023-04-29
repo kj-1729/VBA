@@ -1,0 +1,57 @@
+Sub kick_files_dirs()
+'
+' kick_files_dirs Macro
+'
+    ' Delete "files_dirs" sheet
+    flg = 0
+    Dim ws As Worksheet
+    idx = 14
+    For Each ws In ThisWorkbook.Worksheets
+        If ws.Name = "files_dirs" Then
+            flg = 1
+        End If
+    Next
+    Set ws = Nothing
+
+    If flg = 1 Then
+        Sheets("files_dirs").Delete
+    End If
+
+
+    Sheets("config").Select
+    py = Cells(3, 3)
+    root_dir = Cells(4, 3)
+    
+    output_dir = Cells(5, 3)
+    output_filename = Cells(6, 3)
+    output_sheetname = Left(output_filename, InStr(output_filename, ".") - 1)
+    output_path = output_dir & output_filename
+    
+    cmd = "python " & py & " " & Chr(34) & root_dir & Chr(34) & " > " & output_path
+    Cells(11, 1) = "cmd"
+    Cells(11, 2) = cmd
+    
+    ' Run files_dirs.py
+    Dim wsh As New IWshRuntimeLibrary.WshShell
+    wsh.Run "%ComSpec% /c " & cmd, 0, True
+     
+    Set wsh = Nothing
+
+    ' Sleep one second
+    Application.Wait Now() + TimeValue("00:00:01")
+
+    ' read result file
+    Workbooks.OpenText Filename:=output_path, _
+        Origin:=932, StartRow:=1, DataType:=xlDelimited, TextQualifier:= _
+        xlDoubleQuote, ConsecutiveDelimiter:=False, Tab:=True, Semicolon:=False, _
+        Comma:=False, Space:=False, Other:=False, FieldInfo:=Array(Array(1, 1), _
+        Array(2, 1), Array(3, 1), Array(4, 1), Array(5, 1), Array(6, 1), Array(7, 1), Array(8, 1), _
+        Array(9, 1), Array(10, 1), Array(11, 1), Array(12, 1), Array(13, 1), Array(14, 1), Array(15 _
+        , 1), Array(16, 1), Array(17, 1), Array(18, 1), Array(19, 1), Array(20, 1), Array(21, 1), _
+        Array(22, 1), Array(23, 1), Array(24, 1), Array(25, 1)), TrailingMinusNumbers:=True
+    
+    Sheets(output_sheetname).Move After:=ThisWorkbook.Sheets(1)
+    Sheets(output_sheetname).Name = "files_dirs"
+    
+'
+End Sub
