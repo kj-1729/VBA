@@ -1,0 +1,24 @@
+Sub kick_xls2db()
+    Sheets("config").Select
+    py = Cells(3, 3)
+    
+    dir_input = Cells(4, 3)
+    filename_input = Cells(5, 3)
+    dir_output = Cells(6, 3)
+    filename_output = Cells(7, 3)
+        
+    path_input = dir_input & filename_input
+    path_output = dir_output & filename_output
+            
+    cmd = "python " & py & " " & Chr(34) & path_input & Chr(34) & " " & Chr(34) & path_output & Chr(34)
+    Cells(11, 1) = "cmd"
+    Cells(11, 2) = cmd
+        
+    ' Run files_dirs.py
+    Dim wsh As New IWshRuntimeLibrary.WshShell
+    wsh.Run "%ComSpec% /c " & cmd, 0, True
+     
+    Set wsh = Nothing
+    
+'
+End Sub

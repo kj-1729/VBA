@@ -1,0 +1,22 @@
+Sub kick_xls_copy_and_paste()
+    Sheets("config").Select
+    py = Cells(3, 3)
+    filename_input = Cells(4, 3)
+    sheetname_input = Cells(5, 3)
+        
+    If filename_input = "ThisWorkbook" Then
+        filename_input = ThisWorkbook.Path & "\" & ThisWorkbook.Name
+    End If
+        
+    cmd = "python " & py & " " & Chr(34) & filename_input & Chr(34) & " " & sheetname_input
+    Cells(11, 1) = "cmd"
+    Cells(11, 2) = cmd
+        
+    ' Run files_dirs.py
+    Dim wsh As New IWshRuntimeLibrary.WshShell
+    wsh.Run "%ComSpec% /c " & cmd, 0, True
+     
+    Set wsh = Nothing
+    
+'
+End Sub
