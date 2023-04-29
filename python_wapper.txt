@@ -8,7 +8,7 @@ Sub python_wrapper()
     output_filename = Cells(6, 3)
     output_path = output_dir & output_filename
     
-    cmd = "python " & py & " " & root_dir & " > " & output_path
+    cmd = "python " & py & " " & Chr(34) & root_dir & Chr(34) & " > " & output_path
         
     ' Run pyhon program
     Dim wsh As New IWshRuntimeLibrary.WshShell
